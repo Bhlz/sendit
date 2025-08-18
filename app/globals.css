@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --bg:#FFFFFF;
+  --surface:#FFFFFF;
+  --text:#0A1B2E;
+  --muted:#466289;
+  --accent:#0A84FF;
+  --accent2:#FF6B00;
+  --divider:rgba(10,27,46,0.10);
+  --ring:rgba(10,132,255,0.45);
+  --input:#F3F8FF; /* azul muy claro */
+}
+
+html,body,#__next{height:100%; background:var(--bg); color:var(--text);}
+
+a,button,[role="button"],input,select,textarea{
+  @apply focus:outline-none focus-visible:ring-4 focus-visible:ring-[color:var(--ring)] focus-visible:ring-offset-0;
+}
+
+.hero-gradient::before{
+  content:"";
+  position:absolute; inset:-20%;
+  background:
+    radial-gradient(1100px 700px at 70% 30%, rgba(10,132,255,0.16), rgba(255,107,0,0.10) 45%, transparent 70%),
+    radial-gradient(800px 600px at 20% 80%, rgba(255,107,0,0.10), transparent 60%);
+  pointer-events:none; filter:contrast(105%) saturate(105%);
+}
+
+.card{ @apply bg-surface border border-[color:var(--divider)] rounded-brand shadow-soft; }
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition-duration:0.001ms !important; }
+}
