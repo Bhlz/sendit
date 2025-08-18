@@ -22,10 +22,7 @@
         "./*"
       ]
     },
-    "types": [
-      "react/experimental",
-      "react-dom/experimental"
-    ],
+    "types": [],
     "isolatedModules": true,
     "plugins": [
       {
