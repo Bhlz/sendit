@@ -1,7 +1,7 @@
 export default function FAQ(){
   const qas = [
     { q: "¿Cuándo lanzan?", a: "Muy pronto. Los preregistrados obtienen acceso anticipado en oleadas." },
-    { q: "¿Cuánto cuesta?", a: "Tendremos precios con descuento por volumen y tarifas preferenciales con paqueterías." },
+    { q: "¿Cuánto cuesta?", a: "Tendremos precios con descuento por volumen y tarifas preferenciales en las paqueterías." },
     { q: "¿Con qué paqueterías funciona?", a: "Con paqueterías líderes en México. Confirmamos integraciones en el onboarding." },
     { q: "¿Sirve para e-commerce?", a: "Sí. Para tiendas y para envíos ocasionales de particulares." }
   ];
