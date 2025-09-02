@@ -1,47 +1,76 @@
 'use client';
+
 import { useEffect, useRef } from 'react';
 
-export default function ParticlesBg(){
+type Props = {
+  disabled?: boolean;
+  lite?: boolean; // baja densidad / fps
+};
+
+export default function ParticlesBg({ disabled, lite }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
-  useEffect(()=>{
-    const canvas = ref.current!; const ctx = canvas.getContext('2d')!;
-    let raf=0; let w=0,h=0; const DPR = Math.min(window.devicePixelRatio||1,2);
-    const particles = Array.from({length: 80}, ()=>({
-      x: Math.random(), y: Math.random(),
-      vx: (Math.random()-0.5)*0.0008, vy: (Math.random()-0.5)*0.0008
+
+  useEffect(() => {
+    if (disabled) return;
+    const canvas = ref.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+    if (!ctx) return;
+
+    let raf = 0;
+    let w = (canvas.width = window.innerWidth);
+    let h = (canvas.height = window.innerHeight);
+    const onResize = () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', onResize);
+
+    // Partículas muy ligeras
+    const count = lite ? 24 : 48;
+    const dots = Array.from({ length: count }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * (lite ? 0.15 : 0.25),
+      vy: (Math.random() - 0.5) * (lite ? 0.15 : 0.25),
+      r: Math.random() * (lite ? 1.1 : 1.6) + 0.4,
+      a: Math.random() * 0.35 + 0.1,
     }));
-    function resize(){
-      w = canvas.clientWidth; h = canvas.clientHeight;
-      canvas.width = w*DPR; canvas.height = h*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
-    }
-    function step(){
-      ctx.clearRect(0,0,w,h);
-      ctx.fillStyle = 'rgba(10,132,255,0.8)';
-      ctx.strokeStyle = 'rgba(255,107,0,0.35)';
-      for(const p of particles){
-        p.x += p.vx; p.y += p.vy;
-        if(p.x<0||p.x>1) p.vx*=-1; if(p.y<0||p.y>1) p.vy*=-1;
-        const x = p.x*w, y=p.y*h;
-        ctx.beginPath(); ctx.arc(x,y,1.6,0,Math.PI*2); ctx.fill();
+
+    const step = () => {
+      // fps más bajo en modo lite
+      raf = window.requestAnimationFrame(step);
+      ctx.clearRect(0, 0, w, h);
+
+      for (const d of dots) {
+        d.x += d.vx;
+        d.y += d.vy;
+
+        if (d.x < 0 || d.x > w) d.vx *= -1;
+        if (d.y < 0 || d.y > h) d.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(10,132,255,${d.a})`;
+        ctx.fill();
       }
-      // links
-      for(let i=0;i<particles.length;i++){
-        for(let j=i+1;j<particles.length;j++){
-          const a=particles[i], b=particles[j];
-          const dx=(a.x-b.x)*w, dy=(a.y-b.y)*h;
-          const d=Math.hypot(dx,dy);
-          if(d<120){
-            ctx.globalAlpha = (120-d)/200;
-            ctx.beginPath(); ctx.moveTo(a.x*w,a.y*h); ctx.lineTo(b.x*w,b.y*h); ctx.stroke();
-            ctx.globalAlpha = 1;
-          }
-        }
-      }
-      raf = requestAnimationFrame(step);
-    }
-    const ro = new ResizeObserver(resize); ro.observe(canvas);
-    resize(); raf = requestAnimationFrame(step);
-    return ()=>{ cancelAnimationFrame(raf); ro.disconnect(); };
-  },[]);
-  return <canvas ref={ref} className="absolute inset-0 -z-10 pointer-events-none" aria-hidden="true" />;
+    };
+    step();
+
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [disabled, lite]);
+
+  if (disabled) return null;
+  return (
+    <canvas
+      ref={ref}
+      className="absolute inset-0 -z-10"
+      aria-hidden
+      style={{ pointerEvents: 'none' }}
+    />
+  );
 }

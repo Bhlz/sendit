@@ -1,4 +1,22 @@
 {
+  "components/Hero.tsx -> ./AuroraFX": {
+    "id": "components/Hero.tsx -> ./AuroraFX",
+    "files": [
+      "static/chunks/_app-pages-browser_components_AuroraFX_tsx.js"
+    ]
+  },
+  "components/Hero.tsx -> ./ParticlesBg": {
+    "id": "components/Hero.tsx -> ./ParticlesBg",
+    "files": [
+      "static/chunks/_app-pages-browser_components_ParticlesBg_tsx.js"
+    ]
+  },
+  "components/Hero.tsx -> ./PhoneMockup": {
+    "id": "components/Hero.tsx -> ./PhoneMockup",
+    "files": [
+      "static/chunks/_app-pages-browser_components_PhoneMockup_tsx.js"
+    ]
+  },
   "node_modules/@react-three/drei/core/VideoTexture.js -> hls.js": {
     "id": "node_modules/@react-three/drei/core/VideoTexture.js -> hls.js",
     "files": []
