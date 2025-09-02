@@ -88,6 +88,7 @@ export default function PhoneMockup() {
   // useEffect en lugar de useLayoutEffect (evita warning/errores)
   useEffect(() => {
     if (!ctn.current) return;
+
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
     // Estado inicial
@@ -105,7 +106,9 @@ export default function PhoneMockup() {
       .to(b4.current, { autoAlpha: 1, y: 0, duration: 0.5 }, '+=0.3')
       .to(ticks4.current, { scale: 1, duration: 0.25 }, '-=0.1');
 
-    return () => tl.kill();
+    // Cleanup debe retornar void (no el Timeline)
+    return () => { tl.kill(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const time = new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
