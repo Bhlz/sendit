@@ -1,16 +1,21 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  darkMode: "class", // ← necesario para el toggle manual (.dark)
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./pages/**/*.{ts,tsx}"
+  ],
   theme: {
     extend: {
       colors: {
         bg: "#FFFFFF",
         surface: "#FFFFFF",
-        text: "#0A1B2E",      /* azul muy oscuro para texto */
-        muted: "#466289",     /* azul medio para secundario */
-        accent: "#0A84FF",    /* azul principal */
-        accent2: "#FF6B00",   /* naranja */
+        text: "#0A1B2E",
+        muted: "#466289",
+        accent: "#0A84FF",
+        accent2: "#FF6B00",
         ring: "rgba(10,132,255,0.45)",
         divider: "rgba(10,27,46,0.10)"
       },

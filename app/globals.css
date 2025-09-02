@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
+/* =================== */
+/* TOKENS (Light/Dark) */
+/* =================== */
+:root {
+  /* Default: CLARO */
   --bg:#FFFFFF;
   --surface:#FFFFFF;
   --text:#0A1B2E;
@@ -12,14 +16,40 @@
   --divider:rgba(10,27,46,0.10);
   --ring:rgba(10,132,255,0.45);
   --input:#F3F8FF; /* azul muy claro */
+
+  /* Asegura que UI nativa use tema claro por defecto */
+  color-scheme: light;
 }
 
-html,body,#__next{height:100%; background:var(--bg); color:var(--text);}
+/* Toggle manual por clase (ThemeToggle añade .dark a <html>) */
+.dark {
+  --bg:#070B12;
+  --surface:#0C121B;
+  --text:#E6EEF8;
+  --muted:#8FA6C6;
+  --accent:#3BA1FF;
+  --accent2:#FF7F2B;
+  --divider:rgba(230,238,248,0.12);
+  --ring:rgba(59,161,255,0.45);
+  --input:#0F1724;
 
-a,button,[role="button"],input,select,textarea{
+  /* Hace que inputs/scrollbars usen dark */
+  color-scheme: dark;
+}
+
+/* ============ */
+/* BASE GLOBALS */
+/* ============ */
+html, body { height:100%; background:var(--bg); color:var(--text); }
+html { scroll-behavior: auto; } /* Lenis se encarga */
+
+a, button, [role="button"], input, select, textarea {
   @apply focus:outline-none focus-visible:ring-4 focus-visible:ring-[color:var(--ring)] focus-visible:ring-offset-0;
 }
 
+/* ================== */
+/* HERO BG COSMÉTICO */
+/* ================== */
 .hero-gradient::before{
   content:"";
   position:absolute; inset:-20%;
@@ -29,9 +59,77 @@ a,button,[role="button"],input,select,textarea{
   pointer-events:none; filter:contrast(105%) saturate(105%);
 }
 
-.card{ @apply bg-surface border border-[color:var(--divider)] rounded-brand shadow-soft; }
+/* ================= */
+/* KEYFRAMES GLOBALES */
+/* ================= */
+@keyframes shimmer { 0%{ background-position:0% 50% } 100%{ background-position:200% 50% } }
+@keyframes ticker  { 0% { transform:translateX(0) } 100% { transform:translateX(-50%) } }
+@keyframes dot     { 0%,60%,100%{ transform:translateY(0); opacity:.6 } 30%{ transform:translateY(-2px); opacity:1 } }
+@keyframes glowPulse { 0%,100%{ box-shadow:0 0 30px rgba(10,132,255,.25) } 50%{ box-shadow:0 0 40px rgba(10,132,255,.38) } }
+
+/* ================= */
+/* LAYERS UTILITIES  */
+/* ================= */
+@layer utilities {
+  /* Tokens como utilities */
+  .bg-surface { background-color: var(--surface); }
+  .bg-input   { background-color: var(--input); }
+  .text-muted { color: var(--muted); }
+  .text-brand { color: var(--text); }
+  .border-divider { border-color: var(--divider); }
+
+  /* Radios y sombras coherentes */
+  .rounded-brand { border-radius: 1.75rem; }
+  .shadow-soft { box-shadow: 0 8px 30px rgba(10,27,46,0.12), 0 2px 8px rgba(10,27,46,0.06); }
+  .shadow-elev { box-shadow: 0 18px 60px rgba(10,27,46,0.18), 0 6px 18px rgba(10,27,46,0.10); }
+
+  /* Glow para CTAs */
+  .glow-brand { animation: glowPulse 2.4s ease-in-out infinite; }
+
+  /* Chips */
+  .chip {
+    @apply inline-flex items-center rounded-full border px-2 py-1 text-xs;
+    border-color: var(--divider);
+  }
+
+  /* Glass */
+  .glass {
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--divider);
+  }
+
+  /* Shimmer util */
+  .shimmer {
+    background-image: linear-gradient(90deg, var(--accent), var(--accent2));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 4s linear infinite;
+  }
+
+  /* Ticker continuo */
+  .animate-ticker { animation: ticker 30s linear infinite; }
+  .ticker-slow    { animation-duration: 40s; }
+  .ticker-fast    { animation-duration: 18s; }
+  .ticker-pause:hover { animation-play-state: paused; }
+
+  /* Fades laterales para carruseles/tickers */
+  .edge-fade-left  { mask-image: linear-gradient(to right, black, transparent); }
+  .edge-fade-right { mask-image: linear-gradient(to left, black, transparent); }
+}
+
+/* ========== */
+/* COMPONENTS */
+/* ========== */
+.card { @apply bg-surface border border-divider rounded-brand shadow-soft; }
 
 /* Reduce motion */
 @media (prefers-reduced-motion: reduce){
-  *{ animation:none !important; transition-duration:0.001ms !important; }
+  * { animation:none !important; transition-duration:0.001ms !important; }
 }
+
+/* Safety: evita invisibilidad por defecto en reveals */
+[data-reveal] { opacity: 1; transform: none; }

@@ -1,4 +1,4 @@
-// File: C:\Users\Panda\Downloads\sendit-lat\app\page.tsx
+// File: /Users/brauliohernandez/Documents/codes/SendIt/sendit/app/page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -1,4 +1,4 @@
-// File: C:\Users\Panda\Downloads\sendit-lat\app\layout.tsx
+// File: /Users/brauliohernandez/Documents/codes/SendIt/sendit/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

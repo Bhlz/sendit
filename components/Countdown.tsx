@@ -6,21 +6,22 @@ const pad = (n:number)=>n.toString().padStart(2,'0');
 
 export default function Countdown({ target, label='Lanzamiento' }:Props){
   const [txt,setTxt] = useState<string | null>(null);
+  const targetDate = target || process.env.NEXT_PUBLIC_LAUNCH_AT || '';
   useEffect(()=>{
-    if(!target) return;
-    const end = new Date(target).getTime();
+    if(!targetDate) return;
+    const end = new Date(targetDate).getTime();
     const id = setInterval(()=>{
       const diff = Math.max(0, end - Date.now());
       const d = Math.floor(diff/86400000);
       const h = Math.floor((diff/3600000)%24);
       const m = Math.floor((diff/60000)%60);
       const s = Math.floor((diff/1000)%60);
-      setTxt(`${pad(d)}d : ${pad(h)}h : ${pad(m)}m : ${pad(s)}s`);
-    },1000);
+      setTxt(`${pad(d)}d:${pad(h)}h:${pad(m)}m:${pad(s)}s`);
+    }, 1000);
     return ()=>clearInterval(id);
-  },[target]);
+  },[targetDate]);
 
-  if(!target){
+  if(!targetDate){
     return <div aria-live="polite" className="inline-flex items-center gap-2 text-[color:var(--muted)]">
       <span className="h-2 w-2 rounded-full bg-[color:var(--accent2)] animate-pulse" aria-hidden="true" />
       <span>Muy pronto</span>
